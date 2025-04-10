@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Student</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body div class="body-add">
+  <div class="container-add">
+    <!-- Page Title -->
+    <h1 class="page-title">STUDENT INFORMATION SYSTEM</h1>
+    <h2 class="sub-title">ADD NEW STUDENTS</h2>
+
+    <!-- Add Student Form -->
+    <div class="form-container">
+      <form id="addStudentForm" action="/add_student" method="POST">
+        <div class="input-row">
+          <div class="input-group-add">
+            <label for="reg_number">Registration Number</label>
+            <input type="text" id="reg_number" name="reg_number" required>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group-add">
+            <label for="name">Student Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="input-group phone-number">
+            <label for="phone_number">Phone Number</label>
+            <input type="text" id="phone_number" name="phone_number" required>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group-add">
+            <label for="course_name">Course</label>
+            <select id="course_name" name="course_name" required>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+            </select>
+          </div>
+          <div class="input-group-add">
+            <label for="mentor">Mentor</label>
+            <select id="mentor" name="mentor" required>
+              <option value="Dr. Smith">Dr. Smith</option>
+              <option value="Dr. Johnson">Dr. Johnson</option>
+              <option value="Dr. Brown">Dr. Brown</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Student Button -->
+    <button type="submit" class="submit-button" form="addStudentForm">Add Student</button>
+    <button type="button" class="cancel-button" onclick="window.location.href='/dashboard'">Cancel</button>
+  </div>
+
+
+  <!-- JavaScript for Validation -->
+  <script>
+    document.getElementById('addStudentForm').addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get input values
+      const regNumber = document.getElementById('reg_number').value;
+      const name = document.getElementById('name').value;
+      const phoneNumber = document.getElementById('phone_number').value;
+      const courseName = document.getElementById('course_name').value;
+      const mentor = document.getElementById('mentor').value;
+
+      // Validation: Check if all fields are filled
+      if (!regNumber || !name || !phoneNumber || !courseName || !mentor) {
+        alert("Please fill all the fields.");
+        return;
+      }
+
+      // Validation: Check if phone number has 10 digits
+      if (!/^\d{10}$/.test(phoneNumber)) {
+        alert("Phone number must be 10 digits (numbers only).");
+        return;
+      }
+
+      // Check if registration number already exists (via backend)
+      fetch(`/check_reg_number?reg_number=${regNumber}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.exists) {
+            alert("Registration number already exists.");
+          } else {
+            // Submit the form if all validations pass
+            document.getElementById('addStudentForm').submit();
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while checking the registration number.");
+        });
+    });
+  </script>
+</body>
+</html>

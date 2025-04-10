@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="body-add">
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="/dashboard">Dashboard</a></li>
+      <li><a href="/department">Departments</a></li>
+      <li><a href="/marks">Marks</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container-add">
+    <!-- Page Title -->
+    <h1 class="page-title">STUDENT INFORMATION SYSTEM</h1>
+    <h2 class="sub-title">PROFILE SETTINGS</h2>
+
+    <!-- Profile Update Form -->
+    <div class="form-container">
+      <form id="profileForm">
+        <div class="input-row">
+          <div class="input-group-add">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+        </div>
+        <div class="input-row">
+          <div class="input-group-add">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="button-container-add">
+      <button type="submit" class="submit-button" form="profileForm">Update Profile</button>
+      <button type="button" class="cancel-button" onclick="window.location.href='/dashboard'">Cancel</button>
+    </div>
+  </div>
+
+  <!-- JavaScript for Profile Update -->
+  <script>
+    // Fetch current user data when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/get_current_user')
+        .then(response => response.json())
+        .then(data => {
+          if (data.username) {
+            document.getElementById('username').value = data.username;
+            // Store current username for comparison later
+            document.getElementById('username').setAttribute('data-current', data.username);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+    });
+
+    // Handle form submission
+    document.getElementById('profileForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const currentUsername = usernameInput.getAttribute('data-current');
+      const newUsername = usernameInput.value.trim();
+      const newPassword = passwordInput.value.trim();
+
+      if (newUsername === currentUsername && !newPassword) {
+        alert("No changes detected");
+        return;
+      }
+
+      if (newUsername === currentUsername) {
+        // Only password is being changed
+        updateProfile(currentUsername, newPassword);
+        return;
+      }
+
+      // Check if new username is available
+      fetch(`/check_username?username=${encodeURIComponent(newUsername)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.available) {
+            updateProfile(newUsername, newPassword);
+          } else {
+            alert("Username already exists. Please choose a different one.");
+          }
+        })
+        .catch(error => {
+          console.error('Error checking username:', error);
+          alert("Error checking username availability");
+        });
+    });
+
+    function updateProfile(username, password) {
+      const button = document.querySelector('.submit-button');
+      button.disabled = true;
+      button.textContent = "Updating...";
+
+      fetch('/update_profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert("Profile updated successfully!");
+          // Update the current username reference
+          document.getElementById('username').setAttribute('data-current', username);
+          // Optionally redirect or reload
+          window.location.reload();
+        } else {
+          alert("Error updating profile: " + (data.message || "Unknown error"));
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while updating profile");
+      })
+      .finally(() => {
+        button.disabled = false;
+        button.textContent = "Update Profile";
+      });
+    }
+  </script>
+</body>
+</html>
