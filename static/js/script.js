@@ -1,4 +1,4 @@
-document.getElementById('loginForm').addEventListener('submit', function (event) {
+/*document.getElementById('loginForm').addEventListener('submit', function (event) {
   event.preventDefault(); // Prevent form submission
 
   // Get input values
@@ -6,7 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', function (event)
   const password = document.getElementById('password').value;
 
   // Simple validation (replace with actual backend validation)
-});
+});*/
 
 // Handle Edit Button
 document.getElementById('editButton').addEventListener('click', function () {

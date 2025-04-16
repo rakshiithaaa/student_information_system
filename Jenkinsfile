@@ -4,35 +4,30 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Step 1: Checkout code from GitHub
-                git branch: 'main', url: 'https://github.com/rakshiithaaa/flask-app.git'
+                git branch: 'main',
+                    url: 'https://github.com/abhishripathak/Study-Schedule-app.git'
             }
         }
-        
 
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
-                // Step 2: Build the Docker image
-                sh 'docker build -t flask-app .'
+                echo '📦 Building the project...'
+                // Add build steps here, like installing dependencies if needed
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Tests') {
             steps {
-                // Step 3: Stop and remove any existing container
-                sh 'docker stop flask-container || true'
-                sh 'docker rm flask-container || true'
-
-                // Step 4: Run the Docker container
-                sh 'docker run -d --name flask-container -p 5000:5000 flask-app'
+                echo '✅ Running tests...'
+                // Add test execution commands if you have tests
             }
         }
-    }
 
-    post {
-        always {
-            // Step 5: Notify that the pipeline is complete
-            echo 'Pipeline execution completed.'
+        stage('Deploy') {
+            steps {
+                echo '🚀 Deploying the application...'
+                // Add your deployment steps here (copy files, run Django server, etc.)
+            }
         }
     }
 }

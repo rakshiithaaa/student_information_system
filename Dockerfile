@@ -1,15 +1,24 @@
-FROM python:3.9
+# Use an official Python image as base
+FROM python:3.10-slim
 
+# Set working directory
 WORKDIR /app
 
-COPY . /app
+# Copy dependency file
+COPY requirements.txt .
 
-RUN pip install flask
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-ENV flask_app=app.py
-ENV flask_run_host=0.0.0.0
-ENV flask_run_port=5000
+# Copy the rest of your app
+COPY . .
 
+# Expose the port your Flask app runs on
 EXPOSE 5000
- 
+
+# Set environment variables
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+# Run the application
 CMD ["flask", "run"]

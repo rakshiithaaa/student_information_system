@@ -10,9 +10,17 @@
   <!-- Navigation Bar -->
   <nav>
     <ul>
-      <li><a href="/department">Departments</a></li>
+
+      <li><a href="/department">Department</a></li>
       <li><a href="/marks">Marks</a></li>
       <li><a href="/profile">Profile</a></li>
+      
+      <!-- Logout button pushed to right -->
+      <li style="margin-left: auto; margin-right: 20px;">
+        <a href="{{ url_for('login') }}" style="background-color: #dc3545; padding: 5px 15px; border-radius: 4px;">
+          Logout
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -23,7 +31,7 @@
     <div class="button-container">
       <h2 style="font-size: 30px;">Student Details Dashboard</h2>
       <div class="action-buttons">
-        <button onclick="window.location.href='/add_student'">Add Student</button> <!-- Updated URL -->
+        <button onclick="window.location.href='/add_student'">Add Student</button> 
         <button onclick="editStudent()">Edit Student</button>
       </div>
     </div>
@@ -43,6 +51,7 @@
       <tbody>
         {% for student in students %}
         <tr>
+          <!--Radio Button For Table-->
           <td><input type="radio" name="student" value="{{ student[0] }}"></td>
           <td>{{ student[1] }}</td>
           <td>{{ student[2] }}</td>
