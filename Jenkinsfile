@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 pipeline {
     agent any
 
@@ -6,9 +5,9 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/abhishripathak/Study-Schedule-app.git'
+                    url: 'https://github.com/rakshiithaaa/student_information_system.git'
             }
-        }
+        }u
 
         stage('Build') {
             steps {
@@ -32,38 +31,3 @@ pipeline {
         }
     }
 }
-=======
-pipeline {
-    agent any
-
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/abhishripathak/Study-Schedule-app.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo '📦 Building the project...'
-                // Add build steps here, like installing dependencies if needed
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                echo '✅ Running tests...'
-                // Add test execution commands if you have tests
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo '🚀 Deploying the application...'
-                // Add your deployment steps here (copy files, run Django server, etc.)
-            }
-        }
-    }
-}
->>>>>>> 67d6d9b36165ed5fcc488e5c28d2527fca8275b1
