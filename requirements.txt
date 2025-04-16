@@ -1,7 +1,2 @@
-<<<<<<< HEAD
-Flask==2.1.1
-Flask-MySQLdb==1.0.1
-=======
 Flask
 Flask-MySQLdb
->>>>>>> 67d6d9b36165ed5fcc488e5c28d2527fca8275b1
